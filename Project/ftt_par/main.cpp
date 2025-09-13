@@ -30,10 +30,12 @@ void bitReverse(CArray &a) {
 void fft(CArray &a) {
     size_t N = a.size();
     bitReverse(a);
+
     for (size_t len = 2; len <= N; len <<= 1) {
         double angle = -2 * PI / len;
         Complex wlen(cos(angle), sin(angle));
 
+        // Paralelizacija po blokovima
         #pragma omp parallel for
         for (size_t i = 0; i < N; i += len) {
             Complex w(1);
@@ -47,6 +49,7 @@ void fft(CArray &a) {
         }
     }
 }
+
 
 // ---------------- Glavni program ----------------
 int main() {
